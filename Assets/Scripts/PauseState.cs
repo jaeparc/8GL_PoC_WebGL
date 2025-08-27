@@ -13,7 +13,7 @@ public class PauseState : PlayerStateController.IPlayerState
     }
 
     public void UpdateState(){
-        if(Input.GetKeyUp(KeyCode.Escape))
+        if(Input.GetKeyUp(KeyCode.P))
             CC.ChangeState(PlayerStateController.State.Playing);
     }
 

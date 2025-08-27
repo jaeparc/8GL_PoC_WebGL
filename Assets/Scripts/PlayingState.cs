@@ -9,9 +9,9 @@ public class PlayingState : PlayerStateController.IPlayerState
     }
     public void OnEnter()
     {
-        CC.TPController.enabled = true;
-        CC.SPInputs.cursorInputForLook = true;
-        CC.SPInputs.cursorLocked = true;
+        CC.PInputs.ActivateInput();
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     public void UpdateState()
@@ -22,9 +22,10 @@ public class PlayingState : PlayerStateController.IPlayerState
             CC.ChangeState(PlayerStateController.State.Pause);
     }
 
-    public void OnExit(){
-        CC.TPController.enabled = false;
-        CC.SPInputs.cursorInputForLook = false;
-        CC.SPInputs.cursorLocked = false;
+    public void OnExit()
+    {
+        CC.PInputs.DeactivateInput();
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
     }
 }

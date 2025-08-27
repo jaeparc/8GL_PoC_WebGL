@@ -1106,10 +1106,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Cinemachine: {fileID: 2595803214257946772}
+  Canvas: {fileID: 1941315944789798858}
   RoomID: {fileID: 2813144302180737483}
   Username: {fileID: 8678107335428567996}
   NbOfPlayers: {fileID: 7716819095730521023}
   UsernameDisplay: {fileID: 4529147662549319567}
+  Inputs: {fileID: 429900439442248527}
+  LocalPlayerInstance: {fileID: 0}
 --- !u!114 &8395156899558600075
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1122,8 +1125,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38d89aa405f2937418026e549f1aad86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SPInputs: {fileID: 4132350629251878719}
-  TPController: {fileID: 429900439442248520}
+  PInputs: {fileID: 429900439442248527}
   ChatManager: {fileID: 7940091246958964058}
   PauseMenu: {fileID: 5924787701252540779}
 --- !u!114 &7940091246958964058
@@ -4983,7 +4985,7 @@ RectTransform:
   m_GameObject: {fileID: 8580062809664246116}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.004469676, y: 0.004469676, z: 0.004469676}
+  m_LocalScale: {x: -0.004469676, y: 0.004469676, z: 0.004469676}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1969629736461458562}
