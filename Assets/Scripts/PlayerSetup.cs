@@ -15,6 +15,7 @@ public class PlayerSetup : MonoBehaviourPun
     public PlayerInput Inputs;
 
     [HideInInspector] public GameObject LocalPlayerInstance;
+    [HideInInspector] public NewGameManager GM;
 
     void Start()
     {
@@ -40,7 +41,9 @@ public class PlayerSetup : MonoBehaviourPun
             Inputs.enabled = false;
             GetComponent<PlayerStateController>().enabled = false;
         }
-        GameObject.FindWithTag("GameManager").GetComponent<NewGameManager>().PlayersInGame.Add(gameObject);
+        GM = GameObject.FindWithTag("GameManager").GetComponent<NewGameManager>();
+        GM.PlayersInGame.Add(gameObject);
+        LocalPlayerInstance = GM.MainPlayer;
     }
 
     void Update()

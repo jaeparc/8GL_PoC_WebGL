@@ -4,17 +4,22 @@ using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
 using UnityEngine.UI;
+using PlayFab;
+using PlayFab.ClientModels;
+using PlayFab.Internal;
 
 public class NewLauncher : MonoBehaviourPunCallbacks
 {
     [Header("--- REFERENCES ---")]
     public GameObject LoginPanel;
+    public LogManager LM;
     public Text Feedback;
-    public InputField Username;
     public InputField RoomID;
 
     [Header("--- SETTINGS ---")]
     public int MaxPlayersPerRoom = 4;
+
+    bool _isConnecting;
 
     void Awake()
     {
@@ -35,6 +40,7 @@ public class NewLauncher : MonoBehaviourPunCallbacks
 
     public void Connect()
     {
+        _isConnecting = true;
         LoginPanel.SetActive(false);
         Feedback.gameObject.SetActive(true);
 
@@ -49,13 +55,20 @@ public class NewLauncher : MonoBehaviourPunCallbacks
         else
         {
             Feedback.text = "Connecting to server...";
-            if (Username.text == "" || Username.text == null)
-                PhotonNetwork.NickName = "Player#" + Random.Range(1000, 9999);
-            else
-                PhotonNetwork.NickName = Username.text;
+            PhotonNetwork.NickName = LM.GetUsername();
             PhotonNetwork.GameVersion = "1";
             PhotonNetwork.ConnectUsingSettings();
         }
+    }
+
+    void OnPlayFabLoginSuccess(LoginResult result)
+    {
+        Debug.Log("PlayFab login successful!");
+    }
+
+    void OnPlayFabLoginFailed(PlayFabError error)
+    {
+        Debug.LogError("PlayFab login failed: " + error.GenerateErrorReport());
     }
 
     public override void OnConnectedToMaster()
@@ -67,15 +80,18 @@ public class NewLauncher : MonoBehaviourPunCallbacks
     public override void OnJoinedLobby()
     {
         Feedback.text = "Lobby joined";
-        if (RoomID.text == "" || RoomID.text == null)
-            CreatingRoom();
-        else
-            PhotonNetwork.JoinRoom(RoomID.text);
+        if (_isConnecting)
+        {
+            if (RoomID.text == "" || RoomID.text == null)
+                CreatingRoom();
+            else
+                PhotonNetwork.JoinRoom(RoomID.text);
+        }
     }
 
     public override void OnJoinRoomFailed(short returnCode, string message)
     {
-        Feedback.text = "Room join failed: " + message;
+        Debug.Log("Room join failed: " + message);
         CreatingRoom();
     }
 
