@@ -84,9 +84,12 @@ public class ChatManagerRPC : MonoBehaviourPun
     [PunRPC]
     void ReceiveMessage(string senderName, string message)
     {
+        Debug.Log($"Message from {senderName}: {message}");
         _editing = false;
         _timer = 0;
         ChatPanel.SetActive(true);
         Display.text += $"{senderName}: {message}\n";
+        Display.ForceMeshUpdate();
+        Debug.Log(Display.text);
     }
 }

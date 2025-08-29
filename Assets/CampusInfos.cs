@@ -60,7 +60,7 @@ public class CampusInfos : MonoBehaviour
 
     private IEnumerator LoadImage(string url)
     {
-        using (UnityWebRequest request = UnityWebRequest.Get(url))
+        /*using (UnityWebRequest request = UnityWebRequest.Get(url))
         {
             yield return request.SendWebRequest();
 
@@ -78,6 +78,20 @@ public class CampusInfos : MonoBehaviour
                 CampusImage.sprite = sprite;
                 CampusImage.preserveAspect = true;
             }
+        }*/
+        UnityWebRequest www = UnityWebRequestTexture.GetTexture(url);
+        yield return www.SendWebRequest();
+
+        if ((www.result == UnityWebRequest.Result.ConnectionError) | (www.result == UnityWebRequest.Result.ProtocolError))
+        {
+            Debug.Log("# WEBFILE # Chargement image en erreur: " + url + " avec message erreur " + www.error);
+        }
+        else
+        {
+            Texture2D textureImage = ((DownloadHandlerTexture)www.downloadHandler).texture;
+            Sprite sprite = Sprite.Create(textureImage, new Rect(0, 0, textureImage.width, textureImage.height), new Vector2(0.5f, 0.5f));
+            CampusImage.sprite = sprite;
+            CampusImage.preserveAspect = true;
         }
     }
 }
