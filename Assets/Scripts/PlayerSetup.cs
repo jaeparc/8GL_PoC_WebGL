@@ -13,6 +13,8 @@ public class PlayerSetup : MonoBehaviourPun
     public TMP_Text NbOfPlayers;
     public TMP_Text UsernameDisplay;
     public PlayerInput Inputs;
+    public GameObject Geometry;
+    public GameObject Skeleton;
 
     [HideInInspector] public GameObject LocalPlayerInstance;
     [HideInInspector] public NewGameManager GM;
@@ -30,6 +32,8 @@ public class PlayerSetup : MonoBehaviourPun
             Canvas.SetActive(true);
             Inputs.enabled = true;
             GetComponent<PlayerStateController>().enabled = true;
+            Geometry.SetActive(false);
+            Skeleton.SetActive(false);
         }
         else
         {
