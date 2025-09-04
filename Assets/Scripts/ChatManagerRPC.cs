@@ -9,7 +9,8 @@ public class ChatManagerRPC : MonoBehaviourPun
 {
     [Header("--- REFERENCES ---")]
     public GameObject ChatPanel; // Panneau de chat
-    public TMP_InputField TextInput;  // Champ pour taper le message
+    public ScrollRect SR;
+    public InputField TextInput;  // Champ pour taper le message
     public TMP_Text Display;      // Affichage des messages
     public PlayerStateController StateController;
 
@@ -18,18 +19,34 @@ public class ChatManagerRPC : MonoBehaviourPun
 
     private bool _editing = false;
     private float _timer;
+    private bool _wasFocused = false;
 
     void Start()
     {
         Display.text = "";
-        TextInput.onSubmit.AddListener(Submit);
-        TextInput.onSelect.AddListener(Focus);
-        TextInput.onDeselect.AddListener(LostFocus);
+        TextInput.onEndEdit.AddListener(Submit); // au lieu de onSubmit
     }
 
     void Update()
     {
         Chrono();
+        HandleFocusTransitions();
+    }
+
+    void HandleFocusTransitions()
+    {
+        bool focused = TextInput != null && TextInput.isFocused;
+
+        if (focused && !_wasFocused)
+        {
+            Focus();
+        }
+        else if (!focused && _wasFocused)
+        {
+            LostFocus();
+        }
+
+        _wasFocused = focused;
     }
 
     void Chrono()
@@ -52,20 +69,19 @@ public class ChatManagerRPC : MonoBehaviourPun
         TextInput.ActivateInputField();
     }
 
-    void Focus(string text)
+    void Focus()
     {
         _editing = true;
         _timer = 0;
         StateController.ChangeState(PlayerStateController.State.Chatting);
     }
 
-    void LostFocus(string text)
+    void LostFocus()
     {
         _editing = false;
         _timer = 0;
         StateController.ChangeState(PlayerStateController.State.Playing);
     }
-
 
     [PunRPC]
     public void Submit(string message)
@@ -75,7 +91,10 @@ public class ChatManagerRPC : MonoBehaviourPun
         if (!string.IsNullOrEmpty(message))
         {
             // Envoie le message à tous via RPC
-            photonView.RPC("ReceiveMessage", RpcTarget.All, PhotonNetwork.NickName, message);
+            foreach (var obj in FindObjectsOfType<ChatManagerRPC>())
+            {
+                obj.photonView.RPC("ReceiveMessage", RpcTarget.All, PhotonNetwork.NickName, message);
+            }
             TextInput.text = ""; // vide le champ
         }
         StateController.ChangeState(PlayerStateController.State.Playing);
@@ -84,12 +103,11 @@ public class ChatManagerRPC : MonoBehaviourPun
     [PunRPC]
     void ReceiveMessage(string senderName, string message)
     {
-        Debug.Log($"Message from {senderName}: {message}");
         _editing = false;
         _timer = 0;
         ChatPanel.SetActive(true);
-        Display.text += $"{senderName}: {message}\n";
-        Display.ForceMeshUpdate();
-        Debug.Log(Display.text);
+        Display.text += $"{senderName} : {message}\n";
+        Canvas.ForceUpdateCanvases();
+        SR.verticalNormalizedPosition = 0f;
     }
 }

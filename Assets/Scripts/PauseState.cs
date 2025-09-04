@@ -10,8 +10,8 @@ public class PauseState : PlayerStateController.IPlayerState
     public void OnEnter()
     {
         CC.PauseMenu.SetActive(true);
-        if(CC.UIMobile != null)
-            CC.UIMobile.SetActive(false);
+        if(CC.GetComponent<InputTypeDetector>().lastInput == InputTypeDetector.LastInputType.Touch)
+            CC.MobileUI.SetActive(false);
     }
 
     public void UpdateState(){
@@ -22,7 +22,7 @@ public class PauseState : PlayerStateController.IPlayerState
     public void OnExit()
     {
         CC.PauseMenu.SetActive(false);
-        if(CC.UIMobile != null)
-            CC.UIMobile.SetActive(true);
+        if(CC.GetComponent<InputTypeDetector>().lastInput == InputTypeDetector.LastInputType.Touch)
+            CC.MobileUI.SetActive(true);
     }
 }

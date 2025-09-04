@@ -2,19 +2,28 @@ using ExitGames.Client.Photon.StructWrapping;
 using Photon.Pun;
 using TMPro;
 using UnityEngine;
+using Cinemachine;
 using UnityEngine.InputSystem;
+using Photon.Realtime;
+using StarterAssets;
 
 public class PlayerSetup : MonoBehaviourPun
 {
-    public GameObject Cinemachine;
+    [Header("--- CAMERAS ---")]
+    public CinemachineVirtualCamera CM;
+    public Camera Cam;
+    [Header("--- UI ---")]
     public GameObject Canvas;
     public TMP_Text RoomID;
     public TMP_Text Username;
     public TMP_Text NbOfPlayers;
+    [Header("--- WORLD SPACE UI ---")]
     public TMP_Text UsernameDisplay;
+    [Header("--- PLAYER ---")]
     public PlayerInput Inputs;
     public GameObject Geometry;
     public GameObject Skeleton;
+    public ThirdPersonController TPController;
 
     [HideInInspector] public GameObject LocalPlayerInstance;
     [HideInInspector] public NewGameManager GM;
@@ -23,8 +32,8 @@ public class PlayerSetup : MonoBehaviourPun
     {
         if (photonView.IsMine)
         {
-            // C'est mon joueur → activer la caméra
-            Cinemachine.SetActive(true);
+            CM.gameObject.SetActive(true);
+            Cam.gameObject.SetActive(true);
             UsernameDisplay.gameObject.SetActive(false);
             gameObject.tag = "Player"; // Pour les collisions avec la caméra
             RoomID.text = "Room ID : " + PhotonNetwork.CurrentRoom.Name;
@@ -32,13 +41,14 @@ public class PlayerSetup : MonoBehaviourPun
             Canvas.SetActive(true);
             Inputs.enabled = true;
             GetComponent<PlayerStateController>().enabled = true;
+
             Geometry.SetActive(false);
             Skeleton.SetActive(false);
         }
         else
         {
-            // C'est le joueur d'un autre → désactiver la caméra
-            Cinemachine.SetActive(false);
+            CM.gameObject.SetActive(false);
+            Cam.gameObject.SetActive(false);
             UsernameDisplay.gameObject.SetActive(true);
             UsernameDisplay.text = photonView.Owner.NickName;
             Canvas.SetActive(false);

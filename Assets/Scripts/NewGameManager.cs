@@ -11,9 +11,9 @@ public class NewGameManager : MonoBehaviourPunCallbacks
     public Camera SpectatorCamera;
     public GameObject PrefabPlayer;
     public Transform SpawnPoint;
-    public List<GameObject> PlayersInGame = new List<GameObject>();
-    public GameObject MainPlayer;
     public CampusInfos Displayer;
+    [HideInInspector] public List<GameObject> PlayersInGame = new List<GameObject>();
+    [HideInInspector] public GameObject MainPlayer;
 
     void Start()
     {

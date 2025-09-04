@@ -8,6 +8,8 @@ public class PauseController : MonoBehaviourPunCallbacks
 {
     [Header("--- REFERENCES ---")]
     public PlayerStateController StateController;
+    public GameObject Main;
+    public GameObject Options;
 
     public void ResumeGame()
     {
@@ -17,5 +19,17 @@ public class PauseController : MonoBehaviourPunCallbacks
     public void LeaveGame()
     {
         PhotonNetwork.LeaveRoom();
+    }
+
+    public void ToOptions()
+    {
+        Main.SetActive(false);
+        Options.SetActive(true);
+    }
+
+    public void ToMain()
+    {
+        Main.SetActive(true);
+        Options.SetActive(false);
     }
 }

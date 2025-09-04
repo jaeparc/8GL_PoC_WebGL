@@ -132,7 +132,7 @@ namespace StarterAssets
         private void Start()
         {
             // get a reference to our main camera
-            if (_mainCamera == null)
+            if (_mainCamera == null && transform.parent.GetComponentInChildren<Camera>() != null)
             {
                 _mainCamera = transform.parent.GetComponentInChildren<Camera>().gameObject;
             }
@@ -168,7 +168,8 @@ namespace StarterAssets
 
         private void LateUpdate()
         {
-            CameraRotation();
+            if(_mainCamera != null && photonView.IsMine)
+                CameraRotation();
         }
 
         private void AssignAnimationIDs()

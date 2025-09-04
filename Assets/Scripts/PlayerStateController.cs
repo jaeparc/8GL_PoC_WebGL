@@ -17,9 +17,9 @@ public class PlayerStateController : MonoBehaviour
 
     [Header("--- REFERENCES ---")]
     public PlayerInput PInputs;
-    public GameObject UIMobile;
     public ChatManagerRPC ChatManager;
     public GameObject PauseMenu;
+    public GameObject MobileUI;
 
     private IPlayerState _currentState;
 

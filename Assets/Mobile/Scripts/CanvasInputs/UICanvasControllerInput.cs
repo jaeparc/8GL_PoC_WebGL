@@ -7,9 +7,12 @@ namespace StarterAssets
 
         [Header("Output")]
         public StarterAssetsInputs starterAssetsInputs;
+        public PlayerStateController playerStateController;
 
         public void VirtualMoveInput(Vector2 virtualMoveDirection)
         {
+            if (Mathf.Abs(virtualMoveDirection.x) > .7f || Mathf.Abs(virtualMoveDirection.y) > .7f)
+                VirtualSprintInput(true);
             starterAssetsInputs.MoveInput(virtualMoveDirection);
         }
 
@@ -27,7 +30,16 @@ namespace StarterAssets
         {
             starterAssetsInputs.SprintInput(virtualSprintState);
         }
-        
+
+        public void VirtualPauseInput()
+        {
+            playerStateController.ChangeState(PlayerStateController.State.Pause);
+        }
+
+        public void VirtualChatInput()
+        {
+            playerStateController.ChangeState(PlayerStateController.State.Chatting);
+        }
     }
 
 }

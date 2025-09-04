@@ -10,8 +10,11 @@ public class PlayingState : PlayerStateController.IPlayerState
     public void OnEnter()
     {
         CC.PInputs.ActivateInput();
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+        if (CC.GetComponent<InputTypeDetector>().lastInput == InputTypeDetector.LastInputType.Mouse)
+        {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+        }
     }
 
     public void UpdateState()

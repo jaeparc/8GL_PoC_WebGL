@@ -15,6 +15,7 @@ public class NewLauncher : MonoBehaviourPunCallbacks
     public LogManager LM;
     public Text Feedback;
     public InputField RoomID;
+    public InputField MaxPlayers;
 
     [Header("--- SETTINGS ---")]
     public int MaxPlayersPerRoom = 4;
@@ -30,7 +31,10 @@ public class NewLauncher : MonoBehaviourPunCallbacks
     {
         Feedback.text = "Creating room...";
         string roomName = "R" + Random.Range(1000, 9999);
-        PhotonNetwork.CreateRoom(roomName, new Photon.Realtime.RoomOptions { MaxPlayers = MaxPlayersPerRoom }, TypedLobby.Default);
+        if (int.TryParse(MaxPlayers.text, out int players))
+            PhotonNetwork.CreateRoom(roomName, new Photon.Realtime.RoomOptions { MaxPlayers = players }, TypedLobby.Default);
+        else
+            PhotonNetwork.CreateRoom(roomName, new Photon.Realtime.RoomOptions { MaxPlayers = MaxPlayersPerRoom }, TypedLobby.Default);
     }
 
     public override void OnCreatedRoom()
